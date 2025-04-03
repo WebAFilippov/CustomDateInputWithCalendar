@@ -6,7 +6,6 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "esModuleInterop": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -23,13 +22,14 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    /* Alies */
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["./src/app/*"],
-      "@features/*": ["./src/features/*"],
-      "@shared/*": ["./src/shared/*"],
-      "@pages/*": ["./src/pages/*"],
+      "@app/*": ["src/app/*"],
+      "@pages/*": ["src/pages/*"],
+      "@entities/*": ["src/entities/*"],
+      "@features/*": ["src/features/*"],
+      "@widget/*": ["src/widget/*"],
+      "@shared/*": ["src/shared/*"]
     }
   },
   "include": ["src"]

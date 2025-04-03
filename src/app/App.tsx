@@ -1,13 +1,9 @@
 import { HomePage } from '@pages/Home';
-import './styles/normalize.scss';
-import style from './app.module.scss';
 
-function App() {
+export const App = () => {
   return (
-    <div className={style.app}>
+    <div className="bg-background h-screen w-screen flex justify-center items-center">
       <HomePage />
     </div>
   );
-}
-
-export default App;
+};
