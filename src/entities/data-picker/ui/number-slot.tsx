@@ -99,16 +99,25 @@ export const NumberSlot = forwardRef<HTMLButtonElement, NumberSlotProps>(
       }
       if (e.key === 'ArrowRight') {
         e.preventDefault()
-        setControl({ field: name, command: 'next' })
+        setControl('next')
       }
       if (e.key === 'ArrowLeft') {
         e.preventDefault()
-        setControl({ field: name, command: 'prev' })
+        setControl('prev')
       }
       if (e.key === 'Backspace' || e.key === 'Delete') {
         e.preventDefault()
         setValueSlot(placeholder)
         onChangeInput('')
+      }
+
+      if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+        e.preventDefault()
+
+        if (valueSlot === placeholder) {
+          setValueSlot(e.key)
+          onChangeInput(e.key)
+        }
       }
     }
 

@@ -8,6 +8,7 @@ export const HomePage = () => {
     <div className="flex w-screen h-screen flex-col gap-10 justify-center items-center">
       <DataPickerInput
         type="data"
+        placeholder='Введите дату'
         dateFrom={dateFrom}
         onChangeFrom={setDateFrom}
       />
