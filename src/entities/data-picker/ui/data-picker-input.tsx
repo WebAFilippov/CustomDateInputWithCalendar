@@ -1,62 +1,34 @@
-import { FC } from 'react';
-import { DatePicker } from './date-picker';
+import { FC } from 'react'
+import { DateInput } from './date-input'
 
 interface DateProps {
-  type: 'data';
-  dateFrom: string;
-  onChangeDateFrom: (value: string) => void;
-  dateTo?: never;
-  onChangeDateTo?: never;
-}
-
-interface DateTimeProps {
-  type: 'datatime';
-  dateFrom: string;
-  onChangeDateFrom: (value: string) => void;
-  dateTo?: never;
-  onChangeDateTo?: never;
+  type: 'data'
+  dateFrom: string
+  onChangeFrom: (value: string) => void
+  dateTo?: never
+  onChangeTo?: never
 }
 
 interface PeriodProps {
-  type: 'period';
-  dateFrom: string;
-  onChangeDateFrom: (value: string) => void;
-  dateTo: string;
-  onChangeDateTo: (value: string) => void;
+  type: 'period'
+  dateFrom: string
+  onChangeFrom: (value: string) => void
+  dateTo: string
+  onChangeTo: (value: string) => void
 }
 
-interface PeriodTimeProps {
-  type: 'periodtime';
-  dateFrom: string;
-  onChangeDateFrom: (value: string) => void;
-  dateTo: string;
-  onChangeDateTo: (value: string) => void;
-}
-
-type DatePickerInputProps =
-  | DateProps
-  | DateTimeProps
-  | PeriodProps
-  | PeriodTimeProps;
+type DatePickerInputProps = DateProps | PeriodProps
 
 export const DataPickerInput: FC<DatePickerInputProps> = ({
   type,
   dateFrom,
   dateTo,
-  onChangeDateFrom,
-  onChangeDateTo,
+  onChangeFrom,
+  onChangeTo,
 }) => {
   if (type === 'data') {
-    return (
-      <DatePicker dateFrom={dateFrom} onChangeDateFrom={onChangeDateFrom} />
-    );
+    return <DateInput dateFrom={dateFrom} onChangeFrom={onChangeFrom} />
   }
 
-  if (type === 'datatime') {
-    return null;
-  }
-
-  if (type === 'period' || type === 'periodtime') {
-    return null;
-  }
-};
+  return null
+}

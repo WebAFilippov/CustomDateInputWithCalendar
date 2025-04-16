@@ -1,5 +1,4 @@
 import { DataPickerInput } from '@entities/data-picker'
-
 import { useState } from 'react'
 
 export const HomePage = () => {
@@ -10,10 +9,15 @@ export const HomePage = () => {
       <DataPickerInput
         type="data"
         dateFrom={dateFrom}
-        onChangeDateFrom={setDateFrom}
+        onChangeFrom={setDateFrom}
       />
-
       <input type="date" name="" id="" />
+
+      {dateFrom && (
+        <p>
+          Результат: <span>{dateFrom}</span>
+        </p>
+      )}
     </div>
   )
 }

@@ -1,1 +1,1 @@
-export { DataPickerInput } from './ui';
+export { DataPickerInput } from './ui/data-picker-input'

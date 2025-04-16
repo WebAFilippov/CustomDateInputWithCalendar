@@ -1,27 +1,38 @@
 import {
-  ChangeEvent,
-  InputHTMLAttributes,
-  MouseEvent,
+  ButtonHTMLAttributes,
   forwardRef,
-  useRef,
-  useCallback,
   KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
-import { ControlProps } from './date-picker'
+import { ControlProps } from './date-input'
+import { cn } from '@shared/lib'
 
-interface NumberSlotProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string
+interface NumberSlotProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  name: 'day' | 'month' | 'year'
+  placeholder: string
+  value: string
+  min: number
+  max: number
   onChangeInput: (value: string) => void
   setControl: (obk: ControlProps) => void
 }
 
-export const NumberSlot = forwardRef<HTMLInputElement, NumberSlotProps>(
-  ({ name, onChangeInput, setControl, ...props }, ref) => {
-    const inputRef = useRef<HTMLInputElement>(null)
+export const NumberSlot = forwardRef<HTMLButtonElement, NumberSlotProps>(
+  (
+    { name, placeholder, value, min, max, onChangeInput, setControl, ...props },
+    ref
+  ) => {
+    const [valueSlot, setValueSlot] = useState(value || placeholder)
+    const slotRef = useRef<HTMLButtonElement>(null)
+
+    const lenght = String(max).length
 
     const setRefs = useCallback(
-      (node: HTMLInputElement | null) => {
-        inputRef.current = node
+      (node: HTMLButtonElement | null) => {
+        slotRef.current = node
         if (typeof ref === 'function') {
           ref(node)
         } else if (ref) {
@@ -31,34 +42,57 @@ export const NumberSlot = forwardRef<HTMLInputElement, NumberSlotProps>(
       [ref]
     )
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-      onChangeInput(e.target.value)
-      if (inputRef.current) {
-        inputRef.current.select()
-      }
-    }
-    const handleFocus = () => {
-      if (inputRef.current) {
-        inputRef.current.select()
-      }
-    }
-    const handleMouseDown = (e: MouseEvent<HTMLInputElement>) => {
-      e.preventDefault()
-      if (inputRef.current) {
-        inputRef.current.focus()
-        setTimeout(() => inputRef.current?.select(), 0)
-      }
-    }
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (!inputRef.current) return
+    useEffect(() => {
+      setValueSlot(value || placeholder)
+    }, [value, placeholder])
 
+    const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
       console.log(e.key)
 
       if (e.key === 'ArrowUp') {
         e.preventDefault()
+        let delta
+        const date = new Date()
+        if (name === 'day' && valueSlot === placeholder) {
+          delta = date.getDate()
+          onChangeInput(String(delta).padStart(lenght, '0'))
+          return
+        }
+        if (name === 'month' && valueSlot === placeholder) {
+          delta = date.getMonth() + 1
+          onChangeInput(String(delta).padStart(lenght, '0'))
+          return
+        }
+        if (name === 'year' && valueSlot === placeholder) {
+          delta = date.getFullYear()
+          onChangeInput(String(delta).padStart(lenght, '0'))
+          return
+        }
+
+        const value = parseInt(valueSlot, 10)
+        const newValue = value + 1 > max ? min : value + 1
+        onChangeInput(String(newValue).padStart(lenght, '0'))
       }
       if (e.key === 'ArrowDown') {
         e.preventDefault()
+        let delta
+        const date = new Date()
+        if (name === 'day' && valueSlot === placeholder) {
+          delta = date.getDay()
+          onChangeInput(String(delta).padStart(lenght, '0'))
+        }
+        if (name === 'month' && valueSlot === placeholder) {
+          delta = date.getMonth()
+          onChangeInput(String(delta).padStart(lenght, '0'))
+        }
+        if (name === 'year' && valueSlot === placeholder) {
+          delta = date.getFullYear()
+          onChangeInput(String(delta).padStart(lenght, '0'))
+        }
+
+        const value = parseInt(valueSlot, 10)
+        const newValue = value - 1 < min ? max : value - 1
+        onChangeInput(String(newValue).padStart(lenght, '0'))
       }
       if (e.key === 'ArrowRight') {
         e.preventDefault()
@@ -70,35 +104,24 @@ export const NumberSlot = forwardRef<HTMLInputElement, NumberSlotProps>(
       }
       if (e.key === 'Backspace' || e.key === 'Delete') {
         e.preventDefault()
-        if (name === 'day') {
-          onChangeInput('дд')
-          inputRef.current.focus()
-          setTimeout(() => inputRef.current?.select(), 0)
-        }
-        if (name === 'month') {
-          onChangeInput('мм')
-          inputRef.current.focus()
-          setTimeout(() => inputRef.current?.select(), 0)
-        }
-        if (name === 'year') {
-          onChangeInput('гггг')
-          inputRef.current.focus()
-          setTimeout(() => inputRef.current?.select(), 0)
-        }
+        setValueSlot(placeholder)
+        onChangeInput('')
       }
     }
 
     return (
-      <input
+      <button
         ref={setRefs}
-        {...props}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onMouseDown={handleMouseDown}
+        className={cn(
+          'px-[0.05rem] select-none outline-none focus:bg-blue-500 focus:text-white cursor-default',
+          props.className
+        )}
+        name={name}
         onKeyDown={handleKeyDown}
-      />
+        {...props}
+      >
+        {valueSlot}
+      </button>
     )
   }
 )
-
-NumberSlot.displayName = 'NumberSlot'
