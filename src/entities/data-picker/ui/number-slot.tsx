@@ -78,16 +78,19 @@ export const NumberSlot = forwardRef<HTMLButtonElement, NumberSlotProps>(
         let delta
         const date = new Date()
         if (name === 'day' && valueSlot === placeholder) {
-          delta = date.getDay()
+          delta = date.getDate()
           onChangeInput(String(delta).padStart(lenght, '0'))
+          return
         }
         if (name === 'month' && valueSlot === placeholder) {
-          delta = date.getMonth()
+          delta = date.getMonth() + 1
           onChangeInput(String(delta).padStart(lenght, '0'))
+          return
         }
         if (name === 'year' && valueSlot === placeholder) {
           delta = date.getFullYear()
           onChangeInput(String(delta).padStart(lenght, '0'))
+          return
         }
 
         const value = parseInt(valueSlot, 10)
